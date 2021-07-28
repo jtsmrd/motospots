@@ -9,8 +9,10 @@ import MainAppBar from './components/MainAppBar';
 import { MuiThemeProvider } from '@material-ui/core';
 import theme from './styles/theme';
 import Home from './components/Home';
+import {APP_ENV} from "./constants/Environment";
 
 Sentry.init({
+    environment: APP_ENV,
     dsn: 'https://e49a6d5098d14e77bfdd6907dd04282e@o921632.ingest.sentry.io/5868191',
     integrations: [new Integrations.BrowserTracing()],
 
