@@ -159,6 +159,12 @@ class RiderCheckinController extends AbstractController
             ));
         }
 
+        $this->logger->info('RiderCheckin created', [
+            'route_name' => 'create_rider_checkin',
+            'user_uuid' => $userUUID ?? $newUserUUID,
+            'success' => true
+        ]);
+
         return $response;
     }
 
@@ -196,6 +202,12 @@ class RiderCheckinController extends AbstractController
                 'lng' => $riderCheckin->getLng()
             ];
         }
+
+        $this->logger->info('RiderCheckins fetched', [
+            'route_name' => 'get_rider_checkins',
+            'count' => count($checkinsCollection),
+            'success' => true
+        ]);
 
         return new JsonResponse($checkinsCollection, Response::HTTP_OK);
     }
@@ -270,6 +282,12 @@ class RiderCheckinController extends AbstractController
         $this->entityManager->persist($riderCheckin);
         $this->entityManager->flush();
 
+        $this->logger->info('RiderCheckin updated', [
+            'route_name' => 'update_rider_checkin',
+            'user_uuid' => $userUUID,
+            'success' => true
+        ]);
+
         return new JsonResponse([
             'id' => $riderCheckin->getId(),
             'userUUID' => $riderCheckin->getUserUUID(),
@@ -315,6 +333,12 @@ class RiderCheckinController extends AbstractController
 
         $this->entityManager->persist($riderCheckin);
         $this->entityManager->flush();
+
+        $this->logger->info('RiderCheckin deleted', [
+            'route_name' => 'expire_rider_checkin',
+            'user_uuid' => $userUUID,
+            'success' => true
+        ]);
 
         return new JsonResponse([
             'id' => $riderCheckin->getId(),

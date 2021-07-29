@@ -8,6 +8,7 @@ use App\Exception\InvalidDataException;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,9 +29,18 @@ class RiderMeetupController extends AbstractController
      */
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
+    )
     {
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -145,6 +155,12 @@ class RiderMeetupController extends AbstractController
             ));
         }
 
+        $this->logger->info('RiderMeetup created', [
+            'route_name' => 'create_rider_meetup',
+            'user_uuid' => $userUUID ?? $newUserUUID,
+            'success' => true
+        ]);
+
         return $response;
     }
 
@@ -185,6 +201,12 @@ class RiderMeetupController extends AbstractController
                 'lng' => $meetup->getLng()
             ];
         }
+
+        $this->logger->info('RiderMeetups fetched', [
+            'route_name' => 'get_rider_meetups',
+            'count' => count($meetupsCollection),
+            'success' => true
+        ]);
 
         return new JsonResponse($meetupsCollection, Response::HTTP_OK);
     }
@@ -278,6 +300,12 @@ class RiderMeetupController extends AbstractController
         $this->entityManager->persist($riderMeetup);
         $this->entityManager->flush();
 
+        $this->logger->info('RiderMeetup updated', [
+            'route_name' => 'update_rider_meetup',
+            'user_uuid' => $userUUID,
+            'success' => true
+        ]);
+
         return new JsonResponse([
             'id' => $riderMeetup->getId(),
             'userUUID' => $riderMeetup->getUserUUID(),
@@ -327,6 +355,12 @@ class RiderMeetupController extends AbstractController
 
         $this->entityManager->persist($riderMeetup);
         $this->entityManager->flush();
+
+        $this->logger->info('RiderMeetup deleted', [
+            'route_name' => 'expire_rider_meetup',
+            'user_uuid' => $userUUID,
+            'success' => true
+        ]);
 
         return new JsonResponse([
             'id' => $riderMeetup->getId(),
