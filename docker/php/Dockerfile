@@ -18,10 +18,10 @@ RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 RUN git config --global user.email "jtsmrdel@gmail.com" \
     && git config --global user.name "JT Smrdel"
 
-COPY . /var/www/dev.motospots.com
-WORKDIR /var/www/dev.motospots.com
+COPY . /usr/src/app/motospots.com
+WORKDIR /usr/src/app/motospots.com
 
-RUN PATH=$PATH:/var/www/dev.motospots.com/vendor/bin:bin
+RUN PATH=$PATH:/usr/src/app/motospots.com/vendor/bin:bin
 
 #RUN composer install
 
