@@ -36,7 +36,7 @@ services:
       - ../:/usr/src/app/motospots.com
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ./data/certbot/www:/usr/src/app/certbot
     depends_on:
       - php
       - database
@@ -45,7 +45,7 @@ services:
     image: certbot/certbot
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ./data/certbot/www:/usr/src/app/certbot
 
 volumes:
   mysql_data:
