@@ -47,7 +47,6 @@ const RiderCheckinView: React.FC<{}> = (props) => {
     }, [selectedRiderCheckin]);
 
     const fetchRiderCheckins = useCallback(() => {
-        console.log('Fetch rider checkins');
         dispatch(getRiderCheckinsRequestAction({}));
     }, []);
 

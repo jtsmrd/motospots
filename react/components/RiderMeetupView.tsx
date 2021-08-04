@@ -47,7 +47,6 @@ const RiderMeetupView: React.FC<{}> = (props) => {
     }, [selectedRiderMeetup]);
 
     const fetchRiderMeetups = useCallback(() => {
-        console.log('Fetch rider meetups');
         dispatch(getRiderMeetupsRequestAction({}));
     }, [dispatch]);
 

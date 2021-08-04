@@ -9,6 +9,7 @@ import * as Types from '../redux/Types';
 import '../utilities/date.string.extensions';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import Cookie from 'js-cookie';
+import {formatToLocalDate} from "../utilities/dateTimeUtils";
 
 export interface RiderCheckinInfoDialogProps {
     open: boolean;
@@ -109,7 +110,7 @@ const RiderCheckinInfoDialog: React.FC<RiderCheckinInfoDialogProps> = (props) =>
     const checkinTimeText = useMemo(() => {
         return (
             riderCheckin?.createDate &&
-            formatDistanceStrict(new Date(), new Date(riderCheckin.createDate.formatToLocalDate()))
+            formatDistanceStrict(new Date(), formatToLocalDate(riderCheckin.createDate))
         );
     }, [riderCheckin]);
 

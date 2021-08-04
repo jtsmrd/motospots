@@ -21,23 +21,12 @@ export const useGeoLocation = () => {
     };
 
     useEffect(() => {
-        console.log('navigator', navigator);
         if (!navigator?.geolocation) {
             setError('Geolocation is not supported');
             return;
         }
 
         navigator?.geolocation?.getCurrentPosition(locationSuccess, locationError, locationOptions);
-
-        // navigator?.permissions?.query({ name: 'geolocation' }).then(function (result) {
-        //     if (result.state === 'granted') {
-        //         navigator?.geolocation?.getCurrentPosition(locationSuccess);
-        //     } else if (result.state === 'prompt') {
-        //         navigator?.geolocation?.getCurrentPosition(locationSuccess, locationError, locationOptions);
-        //     } else if (result.state === 'denied') {
-        //         setError('Geolocation is not enabled');
-        //     }
-        // });
     }, []);
 
     return {
