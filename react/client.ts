@@ -1,9 +1,9 @@
 import axios from 'axios';
-import {API_PORT} from "./constants/Environment";
+import {API_URL} from "./constants/Environment";
 
 
 const client = axios.create({
-    baseURL: '',
+    baseURL: API_URL,
     timeout: 10000,
 });
 
