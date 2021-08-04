@@ -36,18 +36,18 @@ services:
       - ../:/usr/src/app/motospots.com
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./certbot/conf:/etc/nginx/ssl
-      - ./certbot/data:/var/www/certbot
+      - ./certbot/data:/usr/src/app/motospots.com/certbot
     depends_on:
       - php
       - database
 
   certbot:
     image: certbot/certbot:latest
-    command: certonly --webroot --webroot-path=/var/www/certbot --email jtsmrdel@gmail.com --agree-tos --no-eff-email -d motospots.com -d www.motospots.com
+    command: certonly --webroot --webroot-path=/usr/src/app/motospots.com/certbot --email jtsmrdel@gmail.com --agree-tos --no-eff-email -d motospots.com -d www.motospots.com
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/logs:/var/log/letsencrypt
-      - ./certbot/data:/var/www/certbot
+      - ./certbot/data:/usr/src/app/motospots.com/certbot
 
 volumes:
   mysql_data:
