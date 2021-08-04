@@ -3,7 +3,7 @@ import {API_PORT} from "./constants/Environment";
 
 
 const client = axios.create({
-    baseURL: 'nginx',
+    baseURL: '',
     timeout: 10000,
 });
 
