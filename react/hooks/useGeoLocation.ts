@@ -19,16 +19,16 @@ export const useGeoLocation = () => {
     };
 
     useEffect(() => {
-        if (!navigator.geolocation) {
+        if (!navigator?.geolocation) {
             setError('Geolocation is not supported');
             return;
         }
 
-        navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+        navigator?.permissions?.query({ name: 'geolocation' }).then(function (result) {
             if (result.state === 'granted') {
-                navigator.geolocation.getCurrentPosition(locationSuccess);
+                navigator?.geolocation?.getCurrentPosition(locationSuccess);
             } else if (result.state === 'prompt') {
-                navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
+                navigator?.geolocation?.getCurrentPosition(locationSuccess, locationError, locationOptions);
             } else if (result.state === 'denied') {
                 setError('Geolocation is not enabled');
             }
