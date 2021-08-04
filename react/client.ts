@@ -3,7 +3,7 @@ import {API_PORT} from "./constants/Environment";
 
 
 const client = axios.create({
-    baseURL: `https://127.0.0.1:${API_PORT}`,
+    baseURL: `https://motospots.com:${API_PORT}`,
     timeout: 10000,
 });
 
