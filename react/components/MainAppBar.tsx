@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import InfoDialog from './InfoDialog';
+import Cookie from 'js-cookie';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,12 +26,24 @@ const MainAppBar: React.FC<{}> = (props) => {
     const classes = useStyles();
     const [infoDialogVisible, setInfoDialogVisible] = useState(false);
 
+    useEffect(() => {
+        if (!Cookie.get('tutorial_displayed')) {
+            setInfoDialogVisible(true);
+        }
+    }, [])
+
+    const setTutorialCookie = useCallback(() => {
+        if (!Cookie.get('tutorial_displayed')) {
+            Cookie.set('tutorial_displayed', true);
+        }
+    }, [])
+
     return (
         <React.Fragment>
             <AppBar position={'static'} className={classes.appBar}>
                 <Toolbar>
                     <Typography variant={'h6'} className={classes.title}>
-                        MotoSpots
+                        Motospots
                     </Typography>
                     <IconButton
                         id="info-button"
@@ -47,6 +60,7 @@ const MainAppBar: React.FC<{}> = (props) => {
             <InfoDialog
                 open={infoDialogVisible}
                 onClose={() => {
+                    setTutorialCookie();
                     setInfoDialogVisible(false);
                 }}
                 titleText="Welcome to MotoSpots!"

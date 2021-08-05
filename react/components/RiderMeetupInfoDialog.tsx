@@ -9,6 +9,7 @@ import * as Types from '../redux/Types';
 import '../utilities/date.string.extensions';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import Cookie from 'js-cookie';
+import {formatToLocalDate} from "../utilities/dateTimeUtils";
 
 export interface RiderMeetupInfoDialogProps {
     open: boolean;
@@ -100,7 +101,7 @@ const RiderMeetupInfoDialog: React.FC<RiderMeetupInfoDialogProps> = (props) => {
         return (
             riderMeetup?.rideStartDate &&
             riderMeetup?.meetupDate &&
-            formatDistanceStrict(new Date(riderMeetup.rideStartDate), new Date(riderMeetup.meetupDate))
+            formatDistanceStrict(formatToLocalDate(riderMeetup.rideStartDate), formatToLocalDate(riderMeetup.meetupDate))
         );
     }, [riderMeetup]);
 
