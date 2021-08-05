@@ -5,7 +5,7 @@ import { Fab } from '@material-ui/core';
 import { getRiderMeetupsRequestAction, setMapViewModeAction, setSelectedRiderMeetupAction } from '../redux/Actions';
 import RiderCheckinMeetupSelector from './RiderCheckinMeetupSelector';
 import { MapViewMode } from '../redux/reducers/MapInfoReducer';
-import AddIcon from '@material-ui/icons/Add';
+import MyLocationIcon from '@material-ui/icons/MyLocation';
 import * as Types from '../redux/Types';
 import { getMapCenter, getMapZoom, getSelectedRiderMeetup } from '../redux/Selectors';
 import RiderMeetupInfoDialog from './RiderMeetupInfoDialog';
@@ -77,7 +77,7 @@ const RiderMeetupView: React.FC<{}> = (props) => {
         <React.Fragment>
             <RiderCheckinMeetupSelector />
             <Fab color="secondary" aria-label="add" className={classes.meetupButton} onClick={createRiderMeetup}>
-                <AddIcon />
+                <MyLocationIcon />
             </Fab>
             <RiderMeetupInfoDialog
                 open={meetupInfoDialogVisible}

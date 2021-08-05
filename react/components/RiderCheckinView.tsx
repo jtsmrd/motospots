@@ -7,7 +7,7 @@ import { getRiderCheckinsRequestAction, setSelectedRiderCheckinAction } from '..
 import CreateRiderCheckinDialog from './CreateRiderCheckinDialog';
 import EditRiderCheckinDialog from './EditRiderCheckinDialog';
 import RiderCheckinMeetupSelector from './RiderCheckinMeetupSelector';
-import AddIcon from '@material-ui/icons/Add';
+import MyLocationIcon from '@material-ui/icons/MyLocation';
 import RiderCheckinInfoDialog from './RiderCheckinInfoDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -79,7 +79,7 @@ const RiderCheckinView: React.FC<{}> = (props) => {
                     setCheckinDialogVisible(true);
                 }}
             >
-                <AddIcon />
+                <MyLocationIcon />
             </Fab>
             <CreateRiderCheckinDialog
                 open={checkinDialogVisible}

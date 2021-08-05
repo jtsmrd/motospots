@@ -27,27 +27,19 @@ function App() {
         <MuiThemeProvider theme={theme}>
             <Provider store={store}>
                 <Router>
-                    <div
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
                         <div
                             style={{
                                 width: '100vw',
-                                height: '100vh',
+                                height: window.innerHeight,
                                 display: 'flex',
                                 flexDirection: 'column',
                             }}
                         >
                             <MainAppBar />
                             <Switch>
-                                <Redirect exact from={'/'} to={'/home'} />
-                                <Route path={'/home'} component={Home} />
+                                <Route path={'/'} component={Home} />
                             </Switch>
                         </div>
-                    </div>
                 </Router>
             </Provider>
         </MuiThemeProvider>
