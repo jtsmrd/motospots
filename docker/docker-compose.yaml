@@ -4,6 +4,7 @@ services:
   database:
     container_name: database
     image: mariadb
+    restart: unless-stopped
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: Supersnak3
@@ -17,18 +18,21 @@ services:
 
   php:
     container_name: php
+    restart: unless-stopped
     build:
       context: ./php
     ports:
       - '9000:9000'
     volumes:
       - ../:/usr/src/app/motospots.com
+      - ~/private/var/log/motospots:/usr/src/app/motospots.com/var/log
     depends_on:
       - database
 
   nginx:
     container_name: nginx
     image: library/nginx:stable-alpine
+    restart: unless-stopped
     ports:
       - '8080:80'
       - '443:443'
@@ -48,6 +52,17 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/logs:/var/log/letsencrypt
       - ./certbot/data:/usr/src/app/certbot
+
+  sumologic:
+    image: sumologic/collector:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      mode: global
+    environment:
+      SUMO_ACCESS_ID: suKqP7jrUEySH5
+      SUMO_ACCESS_KEY: yeWjWYotWfW8A38aJVnvcuZHF0q2796nZ6XTF4pn52ll9VTDkIZG3cIATJs131xY
 
 volumes:
   mysql_data:
