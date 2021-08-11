@@ -41,6 +41,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./certbot/conf:/etc/nginx/ssl
       - ./certbot/data:/usr/src/app/certbot
+      - ./dhparam/dhparam:/etc/ssl/certs
     depends_on:
       - php
       - database
@@ -66,3 +67,9 @@ services:
 
 volumes:
   mysql_data:
+#  dhparam:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /home/sammy/node_project/dhparam/
+#      o: bind
