@@ -67,9 +67,9 @@ services:
 
 volumes:
   mysql_data:
-#  dhparam:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: /home/sammy/node_project/dhparam/
-#      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: Documents/Personal/Software\ Development/motospots.nosync/docker/dhparam/
+      o: bind
