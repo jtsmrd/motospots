@@ -41,7 +41,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./certbot/conf:/etc/nginx/ssl
       - ./certbot/data:/usr/src/app/certbot
-      - ./dhparam/dhparam:/etc/ssl/certs
+      - ./dhparam:/etc/ssl/certs
     depends_on:
       - php
       - database
