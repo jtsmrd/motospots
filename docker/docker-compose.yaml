@@ -67,6 +67,7 @@ services:
 
 volumes:
   mysql_data:
+  # I don't think I need the config below for dhparam
   dhparam:
     driver: local
     driver_opts:
