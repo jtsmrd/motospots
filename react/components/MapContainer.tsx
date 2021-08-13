@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getMapBounds, getMapViewMode, getRiderCheckins, getRiderMeetups, getUserCheckin } from '../redux/Selectors';
 import {
+    getRiderCheckinsRequestAction, getRiderMeetupsRequestAction,
     removeExpiredRiderCheckins,
     setSelectedRiderCheckinAction,
     setSelectedRiderMeetupAction,
@@ -40,6 +41,10 @@ const MapContainer: React.FC<{}> = (props) => {
     const [mapReady, setMapReady] = useState(false);
     const { geoLocationLat, geoLocationLng, geoLocationError } = useGeoLocation();
     const DEFAULT_ZOOM_LEVEL = 12;
+    const pittsburghLatLng = {
+        lat: 40.4406,
+        lng: -79.9959
+    };
     const mapBounds = useSelector(getMapBounds);
     const riderCheckins = useSelector(getRiderCheckins);
     const userCheckin = useSelector(getUserCheckin);
@@ -57,7 +62,13 @@ const MapContainer: React.FC<{}> = (props) => {
                 lat: geoLocationLat,
                 lng: geoLocationLng,
             });
+            updateMapBounds();
             updateMapCenter(geoLocationLat, geoLocationLng);
+
+            // Initially fetch checkins and meetups. Only really need to
+            // fetch meetups here, but fetching both for consistency.
+            dispatch(getRiderCheckinsRequestAction({}));
+            dispatch(getRiderMeetupsRequestAction({}));
         }
     }, [mapReady, geoLocationLat, geoLocationLng]);
 
@@ -74,8 +85,7 @@ const MapContainer: React.FC<{}> = (props) => {
         return () => clearInterval(interval);
     }, []);
 
-    // Update the map bounds when they change
-    useEffect(() => {
+    function updateMapBounds() {
         // @ts-ignore
         const googleMapBounds = mapRef?.current?.map?.getBounds();
         if (googleMapBounds) {
@@ -100,8 +110,7 @@ const MapContainer: React.FC<{}> = (props) => {
                 );
             }
         }
-        // @ts-ignore
-    }, [mapRef?.current?.map?.getBounds()]);
+    }
 
     function updateMapCenter(lat: number, lng: number) {
         dispatch(
@@ -125,10 +134,12 @@ const MapContainer: React.FC<{}> = (props) => {
     };
 
     const onDragEnd = (mapProps, map, event) => {
+        updateMapBounds();
         updateMapCenter(map.center.lat(), map.center.lng());
     };
 
     const onZoomChanged = (mapProps, map, event) => {
+        updateMapBounds();
         updateMapZoom(map.zoom);
     };
 
@@ -159,6 +170,10 @@ const MapContainer: React.FC<{}> = (props) => {
                 // @ts-ignore
                 mapRef={mapRef}
                 defaultZoomLevel={DEFAULT_ZOOM_LEVEL}
+                initialCenter={{
+                    lat: pittsburghLatLng.lat,
+                    lng: pittsburghLatLng.lng
+                }}
                 onReady={onReady}
                 onDragEnd={onDragEnd}
                 onZoomChanged={onZoomChanged}

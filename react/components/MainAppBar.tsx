@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             color: '#FFFFFF',
         },
+        logo: {
+            height: '50px',
+            marginRight: '1rem',
+            marginLeft: '-0.5rem',
+        }
     }),
 );
 
@@ -42,7 +47,12 @@ const MainAppBar: React.FC<{}> = (props) => {
         <React.Fragment>
             <AppBar position={'static'} className={classes.appBar}>
                 <Toolbar>
-                    <Typography variant={'h6'} className={classes.title}>
+                    {/*<img*/}
+                    {/*    className={classes.logo}*/}
+                    {/*    src={window.location.origin + '/images/motospots_logo_v4.png'}*/}
+                    {/*    alt={'Motorcyle logo'}*/}
+                    {/*/>*/}
+                    <Typography variant={'h5'} className={classes.title}>
                         Motospots
                     </Typography>
                     <IconButton

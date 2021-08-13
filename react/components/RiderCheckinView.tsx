@@ -48,7 +48,7 @@ const RiderCheckinView: React.FC<{}> = (props) => {
 
     const fetchRiderCheckins = useCallback(() => {
         dispatch(getRiderCheckinsRequestAction({}));
-    }, []);
+    }, [dispatch]);
 
     const onCloseRiderCheckinInfoDialog = useCallback(() => {
         dispatch(setSelectedRiderCheckinAction({ riderCheckin: null }));
