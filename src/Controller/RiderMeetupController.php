@@ -10,7 +10,6 @@ use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Uid\Uuid;
 
 
 class RiderMeetupController extends AbstractController
@@ -65,10 +63,6 @@ class RiderMeetupController extends AbstractController
         }
 
         $userUUID = $request->cookies->get('user_uuid');
-        $newUserUUID = null;
-        if (!$userUUID) {
-            $newUserUUID = Uuid::v4();
-        }
 
         $accessor = PropertyAccess::createPropertyAccessor();
 
@@ -117,7 +111,7 @@ class RiderMeetupController extends AbstractController
 
         $riderMeetup = new RiderMeetup();
         $riderMeetup
-            ->setUserUUID($userUUID ?? $newUserUUID)
+            ->setUserUUID($userUUID)
             ->setTitle($title)
             ->setDescription($description)
             ->setLat($lat)
@@ -130,7 +124,13 @@ class RiderMeetupController extends AbstractController
         $this->entityManager->persist($riderMeetup);
         $this->entityManager->flush();
 
-        $response = new JsonResponse([
+        $this->logger->info('RiderMeetup created', [
+            'route_name' => 'create_rider_meetup',
+            'user_uuid' => $userUUID,
+            'success' => true
+        ]);
+
+        return new JsonResponse([
             'id' => $riderMeetup->getId(),
             'userUUID' => $riderMeetup->getUserUUID(),
             'createDate' => $riderMeetup->getCreateDate()->format('Y-m-d H:i:s'),
@@ -142,26 +142,6 @@ class RiderMeetupController extends AbstractController
             'lat' => $riderMeetup->getLat(),
             'lng' => $riderMeetup->getLng()
         ], Response::HTTP_CREATED);
-
-        if (!$userUUID) {
-            $response->headers->setCookie(new Cookie(
-                'user_uuid',
-                $newUserUUID,
-                0,
-                '/',
-                null,
-                null,
-                false
-            ));
-        }
-
-        $this->logger->info('RiderMeetup created', [
-            'route_name' => 'create_rider_meetup',
-            'user_uuid' => $userUUID ?? $newUserUUID,
-            'success' => true
-        ]);
-
-        return $response;
     }
 
     /**

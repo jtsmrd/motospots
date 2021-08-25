@@ -39,7 +39,7 @@ const MainAppBar: React.FC<{}> = (props) => {
 
     const setTutorialCookie = useCallback(() => {
         if (!Cookie.get('tutorial_displayed')) {
-            Cookie.set('tutorial_displayed', true);
+            Cookie.set('tutorial_displayed', true, { expires: 365 });
         }
     }, [])
 

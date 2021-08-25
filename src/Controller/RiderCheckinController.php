@@ -12,13 +12,11 @@ use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -66,11 +64,8 @@ class RiderCheckinController extends AbstractController
         }
 
         $userUUID = $request->cookies->get('user_uuid');
-        $newUserUUID = null;
 
-        if (!$userUUID) {
-            $newUserUUID = Uuid::v4();
-        } else {
+        if ($userUUID) {
             // If existing rider checkin exists, mark as expired
             $repository = $this->getDoctrine()->getRepository(
                 RiderCheckin::class
@@ -127,7 +122,7 @@ class RiderCheckinController extends AbstractController
 
         $riderCheckin = new RiderCheckin();
         $riderCheckin
-            ->setUserUUID($userUUID ?? $newUserUUID)
+            ->setUserUUID($userUUID)
             ->setExpireDate($expireDate)
             ->setMotorcycleMakeModel($motorcycleMakeModel)
             ->setLat($lat)
@@ -137,7 +132,13 @@ class RiderCheckinController extends AbstractController
         $this->entityManager->persist($riderCheckin);
         $this->entityManager->flush();
 
-        $response = new JsonResponse([
+        $this->logger->info('RiderCheckin created', [
+            'route_name' => 'create_rider_checkin',
+            'user_uuid' => $userUUID,
+            'success' => true
+        ]);
+
+        return new JsonResponse([
             'id' => $riderCheckin->getId(),
             'userUUID' => $riderCheckin->getUserUUID(),
             'createDate' => $riderCheckin->getCreateDate()->format('Y-m-d H:i:s'),
@@ -146,26 +147,6 @@ class RiderCheckinController extends AbstractController
             'lat' => $riderCheckin->getLat(),
             'lng' => $riderCheckin->getLng()
         ], Response::HTTP_CREATED);
-
-        if (!$userUUID) {
-            $response->headers->setCookie(new Cookie(
-                'user_uuid',
-                $newUserUUID,
-                0,
-                '/',
-                null,
-                null,
-                false
-            ));
-        }
-
-        $this->logger->info('RiderCheckin created', [
-            'route_name' => 'create_rider_checkin',
-            'user_uuid' => $userUUID ?? $newUserUUID,
-            'success' => true
-        ]);
-
-        return $response;
     }
 
     /**
